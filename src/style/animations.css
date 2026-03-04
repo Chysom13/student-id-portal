@@ -1,0 +1,427 @@
+/**
+ * Animations and Custom Styles for University ID System
+ * File: styles/animations.css
+ */
+
+/* ============= KEYFRAME ANIMATIONS ============= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ============= ANIMATION CLASSES ============= */
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.bounce-animation {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+
+
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.card-body{
+  width: 50rem;
+  height: 30rem;
+  margin: 0 auto;
+  border-radius: 1rem;
+  background-color: #060c51;
+  color: white;
+}
+
+.card-body .header{
+  text-align: center;
+  font-weight: 800;
+  margin-top: 1.3rem;
+  font-size: 1.5rem;
+}
+
+.card-body .content{
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  margin-top: 1.3rem;
+}
+
+.card-body .content .img{
+  width: 45%;
+  height: 15rem;
+}
+
+.card-body .content .right-box{
+  width: 100%;
+  height: 100%;
+}
+
+.card-body .right-box .info-box{
+  padding-left: 1rem;
+  line-height: 2.5rem;
+  font-size: 1rem;
+}
+
+.card-body .barcode{
+  margin-top: .1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.card-display{
+  margin: 2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.card-display .card-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* gap: 10rem; */
+  width: 100%;
+}
+
+.card-display .card-grid img{
+  /* border: 1px solid red; */
+  width: 20rem;
+  display: block;
+}
+
+.barcode .img{
+  /* border: 1px solid red; */
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+
+
+
+
+/* ============= CARD STYLES ============= */
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.card-hover:active {
+  transform: translateY(0);
+}
+
+/* ============= ID CARD GRADIENT ============= */
+
+.id-card-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 20px 40px -10px rgba(102, 126, 234, 0.4);
+}
+
+/* Alternative gradient options */
+.id-card-gradient-blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.4);
+}
+
+.id-card-gradient-green {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.4);
+}
+
+.id-card-gradient-red {
+  background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
+  box-shadow: 0 20px 40px -10px rgba(239, 68, 68, 0.4);
+}
+
+/* ============= FORM INPUTS ============= */
+
+.search-focus:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #6366f1;
+  outline: none;
+}
+
+.input-focus:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #6366f1;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* ============= SELECTION STYLES ============= */
+
+.student-card-selected {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* ============= QR CODE CONTAINER ============= */
+
+.qr-container {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ============= BUTTON STYLES ============= */
+
+.download-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.5);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -3px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+/* ============= GLASSMORPHISM EFFECTS ============= */
+
+.info-badge {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-panel {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============= CUSTOM SCROLLBAR ============= */
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Thin scrollbar variant */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* ============= LOADING STATES ============= */
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.loading-spinner {
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============= BADGE STYLES ============= */
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.badge-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-warning {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.badge-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-info {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* ============= OVERLAY & MODAL ============= */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 51;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+/* ============= RESPONSIVE UTILITIES ============= */
+
+@media (max-width: 768px) {
+  .fade-in,
+  .slide-in {
+    animation-duration: 0.3s;
+  }
+
+  .card-hover:hover {
+    transform: none;
+  }
+}
+
+/* ============= PRINT STYLES ============= */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .id-card-gradient {
+    box-shadow: none;
+  }
+}

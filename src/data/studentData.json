@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Amara Okafor",
+    "matricNumber": "UNI/2021/0045",
+    "department": "Computer Science",
+    "year": "3rd Year",
+    "photo": "https://api.dicebear.com/7.x/avataaars/svg?seed=Amara"
+  },
+  {
+    "id": 2,
+    "name": "Chidi Adebayo",
+    "matricNumber": "UNI/2022/0132",
+    "department": "Engineering",
+    "year": "2nd Year",
+    "photo": "https://api.dicebear.com/7.x/avataaars/svg?seed=Chidi"
+  },
+  {
+    "id": 3,
+    "name": "Ngozi Mbah",
+    "matricNumber": "UNI/2020/0089",
+    "department": "Medicine",
+    "year": "4th Year",
+    "photo": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ngozi"
+  },
+  {
+    "id": 4,
+    "name": "Tunde Williams",
+    "matricNumber": "UNI/2023/0201",
+    "department": "Business Administration",
+    "year": "1st Year",
+    "photo": "https://api.dicebear.com/7.x/avataaars/svg?seed=Tunde"
+  },
+  {
+    "id": 5,
+    "name": "Fatima Hassan",
+    "matricNumber": "UNI/2021/0167",
+    "department": "Law",
+    "year": "3rd Year",
+    "photo": "https://api.dicebear.com/7.x/avataaars/svg?seed=Fatima"
+  }
+]

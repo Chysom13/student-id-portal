@@ -1,0 +1,405 @@
+* {
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+
+:root {
+  --primary: #12bca2;
+  --secondary: #6d15df;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  color: #333;
+  font-family: 'Poppins';
+  background: #f2f2f2;
+}
+
+nav {
+  background: var(--primary);
+  padding: 10px 20px;
+  text-align: center;
+  border-radius: 0 0 2rem 2rem;
+}
+
+nav a {
+  color: #f2f2f2;
+  margin: 10px;
+  display: inline-block;
+}
+
+nav h1 {
+  color: #fff;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.smoothie-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.smoothie-card {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  box-sizing: border-box;
+  border-radius: 6px;
+  position: relative;
+  height: 15rem;
+}
+
+.smoothie-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.smoothie-card .rating {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: var(--secondary);
+  color: #fff;
+  border-radius: 6px;
+  width: 40px;
+  height: 0;
+  padding: 10px 0 35px 0;
+  line-height: 0px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.smoothie-card .rating:hover {
+  transition: ease-in-out .5s;
+  color: var(--primary);
+}
+
+.smoothie-card .delete {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: red;
+  color: #fff;
+  border-radius: 6px;
+  width: 40px;
+  height: 0;
+  padding: 10px 0 35px 0;
+  line-height: 0px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.smoothie-card .delete:hover {
+  transition: .5s ease-in-out;
+  background-color: #fff;
+  color: red;
+}
+
+.smoothie-card .home-card-details {
+  /* border: 1px solid red; */
+  display: flex;
+}
+
+.smoothie-card .home-card-details .details {
+  padding: 10px;
+}
+
+.smoothie-card .barcode {
+  position: absolute;
+  bottom: 0;
+}
+
+form {
+  background-color: #fff;
+  padding: 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
+form input,
+form textarea {
+  display: block;
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  margin: 10px 0 20px 0;
+}
+
+form button {
+  background-color: var(--primary);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-family: "Poppins";
+  cursor: pointer;
+}
+
+form .error {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.order-by button {
+  margin-right: 10px;
+  background-color: var(--primary);
+  color: #fff;
+  border: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: 'Poppins';
+  cursor: pointer;
+}
+
+.student-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+/* .id-container{  
+  width: 50rem;
+  height: 32rem;
+  margin: 10%  auto;
+  border-radius: 15px;
+  background-color: black;
+  color: white;
+}
+
+.id-card-title{
+  text-align: center;
+  width: 100%;
+  margin-top: 1rem;
+  background-color: white;
+  color: black;
+  border-radius: 15px 15px 0 0;
+  padding: 1rem 0;
+}
+
+.id-card-dis{
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  line-height: 3rem;
+}
+
+.id-card-dis .img{
+  display: block;
+  width: 325px;
+  height: 100%;
+
+}
+
+.id-card-dis .id-hero-right{
+  width: 100%;
+} */
+
+/* Physical ID Card Layout (Horizontal) */
+.id-card-container {
+  width: 540px;
+  /* Standard CR80 width horizontal */
+  height: 340px;
+  /* Standard CR80 height horizontal */
+  background-color: #f8fbff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: #333;
+  margin: 0 auto;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  z-index: 1;
+}
+
+/* Repeated MTU Text Background */
+.id-card-bg-pattern {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(133, 217, 243, 0.75), rgba(255, 255, 255, 0.625)),
+    url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='60' font-family='Poppins' font-size='32' font-weight='800' fill='rgba(109, 21, 223, .9)' transform='rotate(-45 60 60)'%3EMTU%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+/* Header */
+.id-card-header {
+  background-color: var(--primary);
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+  border-bottom: 4px solid var(--secondary);
+  z-index: 2;
+}
+
+.id-card-header h2 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.id-card-header p {
+  font-size: 12px;
+  margin: 2px 0 0;
+  font-weight: 500;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+/* Body (Horizontal Flex) */
+.id-card-body {
+  flex: 1;
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  z-index: 2;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Left Side: Photo */
+.id-card-left {
+  flex: 0 0 auto;
+}
+
+.id-card-photo-wrapper {
+  width: 130px;
+  height: 150px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.id-card-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Right Side: Details & Barcode */
+.id-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+}
+
+.id-card-details {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.id-detail-row {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 14px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
+  padding-bottom: 4px;
+}
+
+.id-detail-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.id-label {
+  width: 35%;
+  font-weight: 600;
+  color: #555;
+}
+
+.id-value {
+  width: 65%;
+  font-weight: 600;
+  color: #111;
+  text-align: right;
+  word-wrap: break-word;
+}
+
+.name-value {
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--secondary);
+}
+
+/* Footer & Barcode */
+.id-card-footer {
+  padding: 10px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.id-card-validity p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #d32f2f;
+  text-transform: uppercase;
+}
+
+/* Print Overrides */
+@media print {
+  body {
+    background: white;
+  }
+
+  .page {
+    margin: 0;
+    padding: 0;
+  }
+
+  .id-card-container {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    /* Print dimensions - true to life CR80 Horizontal */
+    width: 3.375in !important;
+    height: 2.125in !important;
+  }
+
+  .id-card-bg-pattern {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  button,
+  .id-card-notice {
+    display: none !important;
+  }
+}
