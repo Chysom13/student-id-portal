@@ -26,8 +26,22 @@ const DisplayCard = () => {
         navigate("/", { replace: true })
         return
       }
+
       if (data) {
-        setCard(data)
+        let updatedCard = { ...data }
+
+        // Ensure "has_printed" correctly matches the level status
+        const levelsMatch = data.last_printed_level === data.level
+
+        if (levelsMatch && !data.has_printed) {
+          updatedCard.has_printed = true
+          await supabase.from("students").update({ has_printed: true }).eq("id", id)
+        } else if (!levelsMatch && data.has_printed) {
+          updatedCard.has_printed = false
+          await supabase.from("students").update({ has_printed: false }).eq("id", id)
+        }
+
+        setCard(updatedCard)
         setLoading(false)
       }
 
@@ -49,11 +63,11 @@ const DisplayCard = () => {
       setPrintingStatus("Updating records...")
       const { error } = await supabase
         .from("students")
-        .update({ has_printed: true })
+        .update({ has_printed: true, last_printed_level: card.level })
         .eq("id", id)
 
       if (!error) {
-        setCard(prev => ({ ...prev, has_printed: true }))
+        setCard(prev => ({ ...prev, has_printed: true, last_printed_level: prev.level }))
         setPrintingStatus("")
       } else {
         setPrintingStatus("PDF generated, but failed to update status in Database.")
@@ -80,7 +94,7 @@ const DisplayCard = () => {
       <div style={{ marginTop: "2rem", textAlign: "center", width: "100%", maxWidth: "400px" }}>
         {card.has_printed ? (
           <div style={{ padding: "15px", backgroundColor: "#fff3cd", color: "#856404", borderRadius: "8px", border: "1px solid #ffeeba", textAlign: "left" }}>
-            <strong>Notice:</strong> Your ID card has already been printed. Please contact central administration if you require a reprint.
+            <strong>Notice:</strong> Your ID card for {card.level} has already been printed. Please contact central administration if you require a reprint.
           </div>
         ) : (
           <button
