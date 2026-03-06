@@ -1,70 +1,120 @@
-# Getting Started with Create React App
+# 🎓 MTU One ID Portal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A self-service Student Identity Card portal for **Mountain Top University (MTU)**. Students can look up their records, capture a profile photo, and download a professionally formatted ID card as a PDF — all from a single interface.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+### Student Portal
+- **Matric Number Search** — Students enter their matriculation number to retrieve their record. Invalid numbers are caught with a clear error message.
+- **Webcam Photo Capture** — If a student has no photo on record, they are directed to a guided webcam capture page with strict instructions (white backdrop, no hats, direct eye contact).
+- **Digital ID Card** — A horizontal CR80-format identity card displaying the student's name, matric number, course, level, and a barcode.
+- **PDF Download** — Students can download their ID card as a PDF directly from the browser.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Print Control (Level-Based)
+- A student can only print their ID card **once per academic level**.
+- The system tracks this using two Supabase columns: `has_printed` (boolean) and `last_printed_level` (text).
+- If a student's level changes (e.g., 200L → 300L), the print button is **automatically re-enabled**.
+- If the levels still match, the button stays locked with a friendly notice.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Admin Dashboard
+- Accessible via a floating 🔐 button at the bottom-right corner of every page.
+- Password-protected login modal (configurable via `.env`).
+- Admins can **search for any student by Matric Number** and view their current print status.
+- A **"Reset Print Lock"** button allows admins to manually re-enable printing (e.g., for lost cards).
+- The nav bar transitions to a **dark purple admin theme** when the admin session is active.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🛠️ Tech Stack
 
-### `npm run build`
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, React Router DOM |
+| Styling | Vanilla CSS |
+| Camera | `react-webcam` |
+| PDF Generation | `react-to-pdf` |
+| Barcode | `react-barcode` |
+| Backend / Database | Supabase (PostgreSQL + Storage) |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🗃️ Database Schema
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Table: **`students`**
 
-### `npm run eject`
+| Column | Type | Description |
+|---|---|---|
+| `id` | uuid | Primary key |
+| `name` | text | Full name |
+| `matric_number` | text | Unique matriculation number |
+| `department` | text | Course / Department |
+| `level` | text | Current academic level (e.g. `200 Level`) |
+| `college` | text | College name |
+| `photo_url` | text | Public URL of student photo in Supabase Storage |
+| `has_printed` | boolean | Whether the card is currently locked (default: `false`) |
+| `last_printed_level` | text | The academic level at which the card was last printed |
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Supabase Storage Bucket:** `student-photos`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## ⚙️ Environment Variables
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Create a `.env` file in the project root with the following:
 
-## Learn More
+```env
+REACT_APP_SUPABASE_URL=your_supabase_project_url
+REACT_APP_ANON_KEY=your_supabase_anon_key
+REACT_APP_ADMIN_PASS=your_admin_password
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> ⚠️ **Important:** Change `REACT_APP_ADMIN_PASS` to a strong, unique password before deploying to production.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 🚀 Getting Started
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+# Install dependencies
+npm install
 
-### Analyzing the Bundle Size
+# Start development server
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The app will be available at `http://localhost:3000`.
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 📁 Project Structure
 
-### Advanced Configuration
+```
+src/
+├── components/
+│   └── IdCard.jsx          # Horizontal CR80 ID Card component
+├── pages/
+│   ├── Home.jsx            # Matric number search page
+│   ├── CapturePhoto.jsx    # Webcam photo capture flow
+│   ├── DisplayCard.jsx     # ID card view & PDF download
+│   ├── AdminLogin.jsx      # Admin password modal
+│   └── AdminDashboard.jsx  # Admin control panel
+├── services/
+│   └── supabase.js         # Supabase client instance
+├── App.jsx                 # Routes & global layout
+└── index.css               # Global styles & ID card CSS
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 🔒 Security Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- The admin password is stored client-side via an environment variable. This is suitable for an internal/intranet tool but should be replaced with **Supabase Auth** for a production-grade deployment.
+- The Supabase Anon Key only has Row-Level Security (RLS) access. Ensure your Supabase policies are configured correctly to limit student data exposure.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📄 License
+
+This project was built for academic purposes at Mountain Top University.
