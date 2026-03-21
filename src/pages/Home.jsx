@@ -47,7 +47,7 @@ const Home = () => {
       <form onSubmit={handleSearch} style={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '400px' }}>
         <input
           type="text"
-          placeholder="e.g. MTU/1234/123"
+          placeholder="Enter Matric Number"
           value={matricNumber}
           onChange={(e) => setMatricNumber(e.target.value)}
           style={{ padding: "12px", fontSize: "16px", marginBottom: "10px", borderRadius: "8px", border: "1px solid #ccc" }}

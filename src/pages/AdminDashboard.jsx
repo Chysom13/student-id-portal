@@ -8,7 +8,7 @@ import StudentMonitor from '../components/StudentMonitor';
 const AdminDashboard = ({ onLogout }) => {
     const navigate = useNavigate();
     const [refreshTrigger, setRefreshTrigger] = useState(0);
-    const [currentView, setCurrentView] = useState('menu'); // 'menu', 'global', 'exhausted', 'monitor'
+    const [currentView, setCurrentView] = useState('menu');
     const [exhaustedCount, setExhaustedCount] = useState(0);
 
     // Guard: redirect to home if not authenticated
