@@ -23,14 +23,17 @@ The student is routed directly to `/card/:id` to view and download their ID.
 
 ---
 
-### Step 2: Webcam Photo Capture (`/capture/:id`)
+### Step 2: Photo Capture (`/capture/:id`)
 
 Students who have no photo on record are guided through a strict photo capture flow:
+
+**Hybrid Capture Logic:**
+- **Primary:** `react-webcam` library for stable browser support.
+- **Fallback:** Native **MediaDevices API** (`getUserMedia`) — the system automatically switches if the library fails.
 
 **On-screen instructions displayed to the student:**
 - Use a clean, solid **white backdrop**
 - Ensure your face is well-lit and clearly visible
-- No hats, sunglasses, or face coverings
 - Look directly at the camera
 
 The student takes a photo, previews it, and can retake before confirming. On confirmation:
@@ -41,68 +44,39 @@ The student takes a photo, previews it, and can retake before confirming. On con
 
 ---
 
-### Step 3: ID Card View (`/card/:id`)
+### Step 3: ID Card View & 3D Interaction (`/card/:id`)
 
-The student sees their fully generated **digital identity card** in a horizontal CR80 format — the same dimensions as a standard physical ID card.
+The student sees their fully generated **3D digital identity card** in a horizontal CR80 format.
 
-**Card Contents:**
-- University header with name and "Student Identity Card" subtitle
-- Student photo (fixed frame with `object-fit: cover` to prevent stretching)
-- Student details: Name, Matric No, Course, Level
-- Barcode (generated locally via `react-barcode`, encoding name and matric number)
-- Validity period
-- Repeating diagonal "MTU" watermark background
+**Key Features:**
+- **3D Flip**: The card is interactive; clicking it flips it over using premium CSS animations to reveal the back.
+- **Front Face**: Displays Student Photo, Name, Matric No, Course, and Level.
+- **Back Face**: Contains the **Verification Scan** (QR Code) and university return instructions.
+- **Watermark**: Repeated diagonal "MTU" text watermark background for security.
 
 **Download Button:**
-Clicking "Download ID Card" calls `react-to-pdf` to generate a PDF of the card at correct print dimensions.
+Clicking "Download ID Card" generates a high-resolution, hardware-accurate 2-page PDF (Front/Back) perfectly sized (85.6mm x 54mm) for PVC card printers.
 
 ---
 
-## Print Control Logic
+### Phase 13: Public Verification Portal
 
-### First-Time Print
-- `last_printed_level` is `null` → button is active
-- After download: `has_printed = true`, `last_printed_level = "200 Level"` (current level)
-
-### Same Level — Reprinting Blocked
-- On page load: `last_printed_level === student.level` → `has_printed` confirmed true
-- Button hidden, notice shown: *"Your ID card for 200 Level has already been printed. Contact administration for reprints."*
-
-### Level Change — Reprinting Unlocked
-- `last_printed_level = "200 Level"`, `student.level = "300 Level"` → mismatch detected
-- System auto-sets `has_printed = false` in Supabase
-- Print button re-enabled — student can download a new card for their new level
+Whenever the student's ID card is scanned via the QR code on the back:
+- **Instant Access**: Opens a public verification portal at `/verify/:matricNumber`.
+- **Portal View**: Displays a professional record with the student's photo, an **"ACTIVE STUDENT"** status badge, and a verified list of currently registered courses fetched from the database.
+- **Security Check**: Provides security personnel with a reliable, digital alternative to physical card inspection.
 
 ---
 
-## Admin Flow
+## Administrative Dashboard
 
-### Accessing the Admin Panel
+The command center allows administrators to manage institutional-level limits and monitor student issuance.
 
-A subtle **🔐 lock icon** floats in the bottom-right corner of every student-facing page. Clicking it opens an overlay modal with a password input.
-
-- Correct password → session stored, nav bar transitions to **dark purple admin theme** with "ADMIN MODE" badge
-- User is navigated to `/admin/dashboard`
-
-### Admin Dashboard
-
-The admin sees a clean search interface. They can type a student's matric number to retrieve their record, which displays:
-- Student name and details
-- Current academic level
-- Last printed level
-- Print lock status badge (🔒 Print Locked / ✅ Can Print)
-
-If the print lock is active, a **"Reset Print Lock"** button appears. Clicking it:
-1. Sets `has_printed = false` in Supabase
-2. Clears `last_printed_level` to `null`
-3. The status badge on-screen instantly updates to ✅ Can Print
-
-### Logging Out
-
-The nav bar shows a "Logout" button in admin mode. Clicking it:
-- Clears the `sessionStorage` admin session
-- Restores the normal teal nav bar
-- Redirects to the Home page
+### Dashboard Sections
+1. **Global Limit Control**: Authority to set institutional print caps for all students.
+2. **Exhausted Limits Queue**: Monitoring system for students who have reached their limits, providing manual overrides (+1 Reprint or Full Reset).
+3. **Global Student Monitor**: Searchable directory of all registered students with live print statistics. 
+   - **Enrollment View**: Admins can click any student to see their full course registration details.
 
 ---
 
@@ -110,10 +84,8 @@ The nav bar shows a "Logout" button in admin mode. Clicking it:
 
 | Feature | Implementation |
 |---|---|
-| Client-side PDF | `react-to-pdf` — renders the card DOM node to PDF |
-| Local barcode | `react-barcode` — no external API dependency |
-| Webcam access | `react-webcam` — browser-native camera access |
-| Admin auth | `sessionStorage` + env variable password (MVP approach) |
-| Print lock | Dual-column DB tracking: `has_printed` + `last_printed_level` |
-| Background watermark | Inline SVG data URI repeated as `background-image` in CSS |
-| Dark admin nav | React state + `sessionStorage` check on every route change |
+| Component | 3D Perspective + Preserve-3D CSS Transforms |
+| PDF Engine | `react-to-pdf` (Hardware-accurate CR80 scaling) |
+| Verification | `qrcode.react` encoding deep-links to `/verify` |
+| Navigation | React Router v6 for SPA transitions |
+| Backend | Supabase Real-time PostgreSQL & Storage |

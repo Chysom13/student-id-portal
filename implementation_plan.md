@@ -33,6 +33,29 @@ React SPA (Create React App)
 | `photo_url` | text | null | Public URL of student photo |
 | `has_printed` | boolean | false | Whether print is currently locked |
 | `last_printed_level` | text | null | Level at which card was last printed |
+| `print_limit` | integer | 1 | Max allowed prints |
+| `print_count` | integer | 0 | Current print count |
+
+**Table:** `courses`
+
+| Column | Type | Default | Description |
+|---|---|---|---|
+| `id` | uuid | auto | Primary key |
+| `course_code` | text | — | e.g. CSC 101 |
+| `course_title` | text | — | e.g. Introduction to Computer Science |
+| `units` | integer | — | Course unit load |
+
+**Table:** `enrolled_courses`
+
+| Column | Type | Default | Description |
+|---|---|---|---|
+| `id` | uuid | auto | Primary key |
+| `matric_number` | text | — | Foreign key mapping to `students.matric_number` |
+| `student_name` | text | — | Student's name |
+| `department` | text | — | Student's department |
+| `course_code` | text | — | Foreign key mapping to `courses.course_code` |
+| `course_title` | text | — | Title of the course |
+| `unit` | integer | — | Unit/credit load of the course |
 
 **Supabase Storage Bucket:** `student-photos` (public read access)
 
@@ -42,10 +65,11 @@ React SPA (Create React App)
 
 | Route | Component | Description |
 |---|---|---|
-| `/` | [Home.jsx](file:///c:/Users/Admin/Documents/Project/finals-project/src/pages/Home.jsx) | Matric number search |
-| `/card/:id` | [DisplayCard.jsx](file:///c:/Users/Admin/Documents/Project/finals-project/src/pages/DisplayCard.jsx) | ID card view & PDF download |
-| `/capture/:id` | [CapturePhoto.jsx](file:///c:/Users/Admin/Documents/Project/finals-project/src/pages/CapturePhoto.jsx) | Webcam photo capture |
-| `/admin/dashboard` | [AdminDashboard.jsx](file:///c:/Users/Admin/Documents/Project/finals-project/src/pages/AdminDashboard.jsx) | Admin control panel |
+| `/` | `Home.jsx` | Matric number search |
+| `/card/:id` | `DisplayCard.jsx` | ID card view & PDF download |
+| `/capture/:id` | `CapturePhoto.jsx` | Webcam photo capture |
+| `/admin/dashboard` | `AdminDashboard.jsx` | Admin control panel |
+| `/verify/:matricNumber` | `VerifyStudent.jsx` | Public verification portal |
 
 > Admin login is a **modal overlay** triggered by a floating FAB, not a page route.
 
@@ -70,59 +94,22 @@ React SPA (Create React App)
 
 ### ID Card View (`/card/:id`)
 - Fetch full student record from Supabase by UUID
-- Render [IdCard](file:///c:/Users/Admin/Documents/Project/finals-project/src/components/IdCard.jsx#3-69) component — horizontal CR80 format
-  - Photo (fixed 130×150px with `object-fit: cover`)
-  - Student details (Name, Matric No, Course, Level)
-  - `react-barcode` barcode encoding `name|matric_number`
-  - Repeating "MTU" diagonal text watermark background
+- Render `IdCard` component — horizontal CR80 format
 - `react-to-pdf` generates a PDF on button click
 
 ---
 
-## Phase 2 — Level-Based Print Control
-
-### Logic (runs on page load in [DisplayCard.jsx](file:///c:/Users/Admin/Documents/Project/finals-project/src/pages/DisplayCard.jsx))
-```
-levelsMatch = (last_printed_level === level)
-
-if levelsMatch AND has_printed is false  → set has_printed = true  in DB
-if NOT levelsMatch AND has_printed is true → set has_printed = false in DB
-```
-
-### On Print Click
-```
-1. Generate PDF via toPDF()
-2. Update DB: has_printed = true, last_printed_level = student.level
-3. Update local state to reflect locked status
-```
-
-### Result
-| State | Button |
-|---|---|
-| Never printed | ✅ Enabled |
-| Printed at same level | 🔒 Disabled — shows notice |
-| Level changed since last print | ✅ Auto re-enabled |
+## Phase 12: 3D Card Flip & Back Face
+- **Interactive Logic**: CSS `perspective` and `preserve-3d` used for a premium flip animation.
+- **Dual Sides**: Separated `FrontFace` and `BackFace` components.
+- **Back Side**: Encodes the QR code and secondary university details.
 
 ---
 
-## Phase 3 — Admin Dashboard
-
-### Access
-- Floating 🔐 FAB at bottom-right of every non-admin page
-- Clicking opens a modal overlay (blurred backdrop)
-- Password checked against `REACT_APP_ADMIN_PASS` env variable
-- On success: session stored in `sessionStorage`, navigates to `/admin/dashboard`
-
-### Nav Bar Behaviour
-- Normal mode: teal gradient, shows "Search Student" link
-- Admin mode: dark purple gradient, shows "ADMIN MODE" badge + "Logout" button
-- Logout clears `sessionStorage` and returns to Home
-
-### Admin Dashboard Features
-- Search student by matric number
-- Displays: name, level, last printed level, print lock status badge
-- **Reset Print Lock** button: sets `has_printed = false` and `last_printed_level = null`
-- Instant UI update on reset without page reload
+## Phase 13: Public Verification Portal
+- **Verification Page**: Direct link from QR code to `/verify/:matricNumber`.
+- **Live Records**: Fetches real-time student and course data.
+- **Mobile Optimized**: Designed for gate security to verify student status instantly.
 
 ---
 
@@ -144,4 +131,4 @@ REACT_APP_ADMIN_PASS=your_secure_password
 | `@supabase/supabase-js` | Database & storage access |
 | `react-webcam` | Webcam access for photo capture |
 | `react-to-pdf` | In-browser PDF generation |
-| `react-barcode` | Local barcode rendering |
+| `qrcode.react` | 2D verification scanning |
