@@ -7,6 +7,7 @@ import DisplayCard from "./pages/DisplayCard";
 import CapturePhoto from "./pages/CapturePhoto";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import VerifyStudent from "./pages/VerifyStudent";
 
 // The main layout wrapper (needs to be inside BrowserRouter to use useLocation)
 function Layout() {
@@ -84,6 +85,7 @@ function Layout() {
         <Route path="/card/:id" element={<DisplayCard />} />
         <Route path="/capture/:id" element={<CapturePhoto />} />
         <Route path="/admin/dashboard" element={<AdminDashboard onLogout={() => setIsAdminSession(false)} />} />
+        <Route path="/verify/:matricNumber" element={<VerifyStudent />} />
       </Routes>
 
       {/* Floating Admin FAB — hidden on admin dashboard page */}

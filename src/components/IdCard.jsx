@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import Barcode from 'react-barcode';
+import { QRCodeSVG } from 'qrcode.react';
 
-const IdCard = ({ student }) => {
-  const [barcodeError, setBarcodeError] = useState(false);
-  const barcodeValue = `${student.name}|${student.matric_number}`;
+const IdCard = ({ student, enrolledCourses = [], forceSide }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
 
-  // Primary: Orca Scan API URL
-  const barcodeApiUrl = `https://api.orcascan.com/barcode/code128?data=${encodeURIComponent(barcodeValue)}`;
+  // Build the verification URL
+  const verifyUrl = `${window.location.origin}/verify/${student.matric_number}`;
+  const currentYear = new Date().getFullYear() + 1;
 
-  return (
-    <div className="id-card-container">
+
+  const FrontFace = () => (
+    <div className="id-card-container" style={forceSide === 'front' ? { position: 'relative' } : {}}>
       {/* Dynamic MTU Watermark Background */}
       <div className="id-card-bg-pattern"></div>
 
@@ -30,7 +31,7 @@ const IdCard = ({ student }) => {
           </div>
         </div>
 
-        {/* Right Side: Details & Barcode */}
+        {/* Right Side: Details & Barcode/QR */}
         <div className="id-card-right">
           <div className="id-card-details">
             <div className="id-detail-row">
@@ -51,29 +52,48 @@ const IdCard = ({ student }) => {
             </div>
           </div>
 
-          <div className="id-card-footer">
-            {!barcodeError ? (
-              <Barcode
-                value={barcodeValue}
-                width={1}
-                height={25}
-                displayValue={false}
-                background="transparent"
-                lineColor="#000"
-                margin={0}
-              />
-            ) : (
-              <img
-                src={barcodeApiUrl}
-                alt="Student Barcode"
-                style={{ height: '25px', maxWidth: '100px' }}
-              />
-            )}
-            <div className="id-card-validity">
-              <p>Valid till: 2025</p>
-            </div>
-          </div>
+          {/* <div className="id-card-footer" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', width: '100%', marginTop: 'auto', paddingTop: '10px' }}>
+            <p style={{ margin: 0, fontSize: '13px', fontStyle: 'italic', color: '#555', cursor: 'pointer', opacity: 0.8 }}>
+              Click to flip card ↺
+            </p>
+          </div> */}
         </div>
+      </div>
+    </div>
+  );
+
+  const BackFace = () => (
+    <div className="id-card-back" style={forceSide === 'back' ? { position: 'relative', transform: 'none' } : {}}>
+      <div className="id-card-bg-pattern" style={{ opacity: 0.3 }}></div>
+      <h3 style={{ marginBottom: '15px', fontSize: '18px', color: 'var(--secondary)', zIndex: 2 }}>
+        VERIFICATION SCAN
+      </h3>
+      
+      <div style={{ background: 'white', padding: '10px', borderRadius: '12px', display: 'flex', flexShrink: 0, width: '150px', height: '150px', justifyContent: 'center', alignItems: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: 2 }}>
+        <QRCodeSVG 
+          value={verifyUrl} 
+          size={135} 
+          level={"L"} 
+          includeMargin={false} 
+        />
+      </div>
+
+      <div style={{ marginTop: '20px', textAlign: 'center', zIndex: 2, background: 'rgba(255,255,255,0.8)', padding: '10px', borderRadius: '8px' }}>
+        <p style={{ margin: '0 0 5px', fontSize: '14px', fontWeight: 'bold' }}>If found, please return to:</p>
+        <p style={{ margin: 0, fontSize: '12px', color: '#444' }}>Registry Department<br/>Mountain Top University</p>
+        <p style={{ marginTop: '10px', fontSize: '14px', fontWeight: '800', color: '#d32f2f', textTransform: 'uppercase' }}>Valid till: {currentYear}</p>
+      </div>
+    </div>
+  );
+
+  if (forceSide === 'front') return <FrontFace />;
+  if (forceSide === 'back') return <BackFace />;
+
+  return (
+    <div className="id-card-scene" onClick={() => setIsFlipped(!isFlipped)}>
+      <div className={`id-card-inner ${isFlipped ? 'flipped' : ''}`}>
+        <FrontFace />
+        <BackFace />
       </div>
     </div>
   );

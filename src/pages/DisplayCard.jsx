@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 import supabase from "../services/supabase"
 import IdCard from "../components/IdCard"
 import { usePDF } from 'react-to-pdf'
@@ -9,9 +9,14 @@ const DisplayCard = () => {
   const navigate = useNavigate()
 
   const [card, setCard] = useState(null)
+  const [enrolledCourses, setEnrolledCourses] = useState([])
   const [loading, setLoading] = useState(true)
   const [printingStatus, setPrintingStatus] = useState("")
-  const { toPDF, targetRef } = usePDF({ filename: 'university-id.pdf' })
+  const { toPDF, targetRef } = usePDF({ 
+    filename: 'MTU-Identity-Card.pdf',
+    page: { format: [85.6, 54], orientation: 'landscape', margin: 0 },
+    canvas: { scale: 2 }
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,14 +44,26 @@ const DisplayCard = () => {
             has_printed: false,
             print_count: 0,
             print_limit: 3, // Standard 3-print cap per level
-            last_printed_level: null,
-            request_status: 'none'
+            last_printed_level: null
           }
           updatedCard = { ...updatedCard, ...updatedFields }
           await supabase.from("students").update(updatedFields).eq("id", id)
         }
 
         setCard(updatedCard)
+        
+        // Fetch Enrolled Courses
+        if (updatedCard.matric_number) {
+          const { data: coursesData } = await supabase
+            .from("enrolled_courses")
+            .select("course_code, unit")
+            .eq("matric_number", updatedCard.matric_number);
+            
+          if (coursesData) {
+            setEnrolledCourses(coursesData);
+          }
+        }
+
         setLoading(false)
       }
 
@@ -71,15 +88,10 @@ const DisplayCard = () => {
       setPrintingStatus("Locking for Reprint...")
 
       // If we just printed our 4th (emergency) card, clear the approved status
-      const isEmergencyFinalPrint = (card.print_count || 0) + 1 >= 4
       const updateData = {
         has_printed: true,
         last_printed_level: card.level,
         print_count: (card.print_count || 0) + 1
-      }
-
-      if (isEmergencyFinalPrint) {
-        updateData.request_status = 'none'
       }
 
       const { error } = await supabase
@@ -157,10 +169,23 @@ const DisplayCard = () => {
             <span style={{ fontWeight: "800" }}>{remainingPrints}</span>
           </div>
 
-          {/* The Printable Area */}
-          <div ref={targetRef} style={{ padding: "20px", background: "white", borderRadius: "8px" }}>
+          {/* The Interactive 3D Card (Not printed) */}
+          <div style={{ padding: "20px", background: "white", borderRadius: "8px" }}>
             <div className="student-card">
-              <IdCard student={card} />
+              <IdCard student={card} enrolledCourses={enrolledCourses} />
+            </div>
+          </div>
+
+          {/* The Hidden Printable Area (Both front and back stacked) */}
+          <div style={{ position: "absolute", zIndex: -1000, top: 0, left: 0, opacity: 0, pointerEvents: "none" }}>
+            <div ref={targetRef} style={{ background: "white", padding: 0, display: "flex", flexDirection: "column", gap: 0, width: "540px" }}>
+              <div style={{ width: "540px", height: "340px", overflow: "hidden" }}>
+                <IdCard student={card} enrolledCourses={enrolledCourses} forceSide="front" />
+              </div>
+              <div className="html2pdf__page-break"></div>
+              <div style={{ width: "540px", height: "340px", overflow: "hidden" }}>
+                <IdCard student={card} enrolledCourses={enrolledCourses} forceSide="back" />
+              </div>
             </div>
           </div>
         </div>
@@ -213,6 +238,21 @@ const DisplayCard = () => {
             {printingStatus || (card.print_count === 0 ? "Download Free ID Card" : "Download Reprint")}
           </button>
         )}
+
+        {/* Temporary Preview Button for Development */}
+        <div style={{ marginTop: "15px" }}>
+          <Link 
+            to={`/verify/${card.matric_number}`}
+            style={{ 
+              fontSize: "13px", 
+              color: "#666", 
+              textDecoration: "underline",
+              opacity: 0.7 
+            }}
+          >
+            Preview Public Verification Page ↗
+          </Link>
+        </div>
       </div>
     </div>
   );
